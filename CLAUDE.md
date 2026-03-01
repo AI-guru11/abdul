@@ -72,10 +72,21 @@ Always maintain this order. `script.js` depends on `window.composeTicket` being 
 All static UI strings live in the `i18n` object keyed by `'ar'` and `'en'`. Keys include:
 
 ```js
+// Profile & nav
 profile_tagline, profile_summary, primary_btn, secondary_btn,
-stats_title, stats_labels, cases_title, contact_title, contact_text,
+// Stats & board
+stats_title, stats_labels, cases_title,
+// Contact
+contact_title, contact_text,
+// Interview & ticket
 interview_btn, case_interview_btn, interview_back_btn,
-search_placeholder, ticket_quality, ticket_copied
+search_placeholder, ticket_quality, ticket_copied,
+// Interactive CV section
+cv_title, cv_download,
+cv_identity_tag, cv_role, cv_meta, cv_about, cv_chips,
+cv_skills_tag, cv_skill_labels[],
+cv_timeline_tag, cv_tl_years[], cv_tl_titles[], cv_tl_descs[],
+cv_lang_1, cv_lang_2
 ```
 
 Add new UI strings here (both `ar` and `en`) before using them in the DOM.
@@ -99,6 +110,24 @@ const appState = {
   lastTicket: null                    // last generated ticket JSON
 };
 ```
+
+---
+
+### Interactive CV Section
+
+- Rendered in `<section id="cv" class="cv-section">` — navigated to via the `#cv` anchor in the profile's "View CV" button.
+- Uses a **CSS bento grid** (`.cv-bento`) with four card types:
+
+| CSS class | Content |
+|---|---|
+| `.cv-card--identity` | Name, role, meta, about text, competency chips, language badges |
+| `.cv-card--skills` | Five skill progress bars (`.cv-skill-fill[data-width]`) |
+| `.cv-card--timeline` | Career history list (`.cv-timeline`) |
+| `.cv-card--code` | Decorative `achievements.js` code snippet |
+
+- Skill bar widths are set via the `data-width` attribute; CSS animates them on scroll via `IntersectionObserver` in `script.js`.
+- A **Download PDF** button (`#cvDownloadBtn`) links to `cv.pdf` (place the file at the repo root to activate it).
+- All text in the CV cards is translated by `applyTranslations()` using the `cv_*` keys in `i18n`.
 
 ---
 
@@ -131,7 +160,10 @@ const appState = {
   impact: 'Arabic business impact',
   impact_en: 'English business impact',
   prevention: 'Arabic prevention steps',
-  prevention_en: 'English prevention steps'
+  prevention_en: 'English prevention steps',
+  // optional — used by ticket composer; falls back to generic text when omitted
+  expected_ar: 'Arabic expected behavior',
+  expected_en: 'English expected behavior'
 }
 ```
 
@@ -197,7 +229,7 @@ Social icons use an inline-SVG injection pattern. In HTML:
 - Triggered by "Generate Developer Ticket" inside the Case Room modal.
 - Pipeline: **Analyze → Critique → Refine**:
   1. **Analyze** — extracts severity, repro steps, expected/actual behavior, impact.
-  2. **Critique** — scores the draft (1–10) on clarity, reproducibility, actionability.
+  2. **Critique** — returns a fixed `10/10` score (all tickets are generated from fully structured case data). The `improvement_note` prompts the developer to attach IDs and logs.
   3. **Refine** — ensures required fields and arrays are properly formed.
 - Returns a strict JSON schema:
 
@@ -238,7 +270,7 @@ To add interview questions for a track, append to the corresponding array in `in
 ### PWA / Service Worker
 
 - `service-worker.js` uses a **Cache First** strategy with a network fallback to `./index.html` for navigations.
-- Cache name: **`aa-portfolio-v1`** — bump this when deploying breaking changes to cached assets.
+- Cache name: **`aa-portfolio-v2`** — bump this when deploying breaking changes to cached assets.
 - Cached assets:
 
 ```js
@@ -261,6 +293,7 @@ To add interview questions for a track, append to the corresponding array in `in
 4. Set `status` to one of: `'Incoming'`, `'Investigating'`, `'Resolved'`, `'Prevented'`.
 5. Use `→` arrows in `repro` / `repro_en` for clean step rendering.
 6. Provide **all** dual-language fields — no field should be omitted.
+7. Optionally add `expected_ar` / `expected_en` to define custom expected-behavior text for the ticket composer; without them, a generic fallback is used.
 
 ### Adding a New UI String
 
@@ -289,7 +322,7 @@ To add interview questions for a track, append to the corresponding array in `in
 When modifying any cached file, increment the cache version in `service-worker.js`:
 
 ```js
-const CACHE_NAME = 'aa-portfolio-v2';  // was v1
+const CACHE_NAME = 'aa-portfolio-v3';  // was v2
 ```
 
 This forces the service worker to purge the old cache on next activation.
@@ -337,6 +370,19 @@ Then open `http://localhost:8080`.
 | `#interviewTrackBadge` | `<div>` | Active track label in interview modal |
 | `#interviewBackBtn` | `<button>` | Back to track Q&A in case mode |
 | `#signature` | `<div>` | "AA" decorative signature |
+| `#cvTitle` | `<h2>` | CV section heading (translated) |
+| `#cvIdentityTag` | `<span>` | "Identity" card label (translated) |
+| `#cvRole` | `<p>` | Job role text in identity card |
+| `#cvMeta` | `<p>` | Years / location / sector meta line |
+| `#cvAbout` | `<p>` | About paragraph in identity card |
+| `#cvChips` | `<div>` | Competency chip container |
+| `#cvLang1` | `<span>` | Language badge 1 (Arabic — Native) |
+| `#cvLang2` | `<span>` | Language badge 2 (English — Professional) |
+| `#cvSkillsTag` | `<span>` | Skills card label (translated) |
+| `#cvTimelineTag` | `<span>` | Timeline card label (translated) |
+| `#cvDownloadBtn` | `<a>` | "Download PDF" link (`href="cv.pdf"`) |
+
+> **`body.no-scroll`** — added by JS when any modal is open; sets `overflow: hidden` and `touch-action: none` to block scroll on iOS Safari.
 
 ---
 
