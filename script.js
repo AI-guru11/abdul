@@ -293,7 +293,9 @@ const i18n = {
     interview_back_btn: 'العودة لمسار المقابلة',
     search_placeholder: 'بحث عن قضية...',
     ticket_quality: 'جودة التذكرة',
-    ticket_copied: 'تم النسخ!'
+    ticket_copied: 'تم النسخ!',
+    cv_title: 'السيرة الذاتية التفاعلية',
+    cv_download: 'تحميل PDF'
   },
   en: {
     profile_tagline: 'Application Support Engineer | Internal Tools & Automation | Software Developer',
@@ -310,7 +312,9 @@ const i18n = {
     interview_back_btn: 'Back to Track',
     search_placeholder: 'Search cases...',
     ticket_quality: 'Quality Score',
-    ticket_copied: 'Copied!'
+    ticket_copied: 'Copied!',
+    cv_title: 'Interactive CV',
+    cv_download: 'Download PDF'
   }
 };
 
@@ -504,6 +508,11 @@ function applyTranslations() {
   if (els.casesTitle) els.casesTitle.textContent = langData.cases_title;
   if (els.contactTitle) els.contactTitle.textContent = langData.contact_title;
   if (els.contactText) els.contactText.textContent = langData.contact_text;
+
+  const cvTitle = document.getElementById('cvTitle');
+  if (cvTitle) cvTitle.textContent = langData.cv_title;
+  const cvDownloadBtn = document.getElementById('cvDownloadBtn');
+  if (cvDownloadBtn) cvDownloadBtn.textContent = langData.cv_download;
   if (els.interviewBtn) els.interviewBtn.textContent = langData.interview_btn;
   if (els.caseInterviewBtn) els.caseInterviewBtn.textContent = langData.case_interview_btn;
   if (els.interviewBackBtn) els.interviewBackBtn.textContent = langData.interview_back_btn;
@@ -902,6 +911,31 @@ function initCursorSpotlight() {
 }
 
 // ==========================================
+// 7b. تهيئة أشرطة المهارات (Skill Bars)
+// ==========================================
+
+function initSkillBars() {
+  const fills = document.querySelectorAll('.cv-skill-fill');
+  if (!fills.length) return;
+
+  // Animate each bar when it enters the viewport (one-shot per element).
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const fill = entry.target;
+          fill.style.width = `${fill.getAttribute('data-width')}%`;
+          observer.unobserve(fill); // fire once — no re-animation on scroll-back
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  fills.forEach((fill) => observer.observe(fill));
+}
+
+// ==========================================
 // 8. تهيئة الأحداث (Initialization)
 // ==========================================
 
@@ -978,6 +1012,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     initScrollAnimations();
     initCursorSpotlight();
+    initSkillBars();
 
   } catch (err) {
     console.error('Init failed:', err);
