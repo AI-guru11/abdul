@@ -35,7 +35,7 @@
       </div>
       <p class="tagline">مهندس دعم التطبيقات | أدوات داخلية وأتمتة | مطور برمجيات</p>
       <p class="summary">
-        متخصص دعم التطبيقات بخبرة تزيد عن خمس سنوات في دعم الأنظمة التشغيلية في بيئات حكومية وخاصة. ماهر في استكشاف المشكلات وتحليل رحلة المستخدم وإعداد تقارير فنية جاهزة للمطورين، بارع في حل المشكلات المعقدة والعمل في بيئات ديناميكية وتقديم نتائج عالية الجودة تحت الضغط. ملتزم بالتعلم المستمر وتحسين جودة الدعم وتجربة المستخدم.
+        متخصص دعم تطبيقات متفانٍ بخبرة تزيد عن 5 سنوات في دعم الأنظمة التشغيلية في القطاعين الحكومي والخاص. خبير في استكشاف الأخطاء وتحليل رحلة المستخدم وإعداد تقارير فنية جاهزة للمطورين (خطوات إعادة الإنتاج، السلوك المتوقع مقابل الفعلي، وتحليل الأثر). سجل حافل في حل المشكلات التقنية المعقدة وتبسيط سير العمل وتقديم نتائج عالية الجودة في بيئات سريعة الإيقاع.
       </p>
       <div class="profile-actions">
         <a href="#cv" class="btn primary-btn">عرض السيرة الذاتية</a>
@@ -52,28 +52,32 @@
 
       <!-- Identity card — spans both rows on desktop -->
       <div class="cv-card cv-card--identity">
-        <span class="cv-card-tag">Identity</span>
+        <span class="cv-card-tag" id="cvIdentityTag">Identity</span>
         <h3 class="cv-name">Abdulrahman Asiri</h3>
-        <p class="cv-role">Application Support Engineer &amp; Software Developer</p>
-        <p class="cv-meta">5+ years &nbsp;·&nbsp; Gov &amp; Private Sector &nbsp;·&nbsp; KSA</p>
-        <p class="cv-about">
-          Specialist in operational system support, user-journey analysis, and producing developer-ready incident reports.
-          Expertise in SLA management, automation tooling, and knowledge-base architecture across high-pressure enterprise environments.
+        <p class="cv-role" id="cvRole">Application Support Engineer &amp; Software Developer</p>
+        <p class="cv-meta" id="cvMeta">5+ years &nbsp;·&nbsp; Riyadh, KSA &nbsp;·&nbsp; Gov &amp; Private Sector</p>
+        <p class="cv-about" id="cvAbout">
+          Specialist in operational system support, user-journey analysis, and producing developer-ready technical reports.
+          Expert in troubleshooting, root-cause analysis, and knowledge-base architecture across high-pressure enterprise environments.
         </p>
-        <div class="cv-identity-chips">
-          <span class="cv-chip">SLA Management</span>
-          <span class="cv-chip">Automation</span>
-          <span class="cv-chip">Incident Analysis</span>
-          <span class="cv-chip">Python · JS · SQL</span>
+        <div class="cv-identity-chips" id="cvChips">
+          <span class="cv-chip">App Troubleshooting</span>
+          <span class="cv-chip">Process Automation</span>
+          <span class="cv-chip">Root-Cause Analysis</span>
+          <span class="cv-chip">Git · Postman · CRM</span>
+        </div>
+        <div class="cv-identity-langs" id="cvLangs">
+          <span class="cv-chip cv-lang-chip" id="cvLang1">Arabic — Native</span>
+          <span class="cv-chip cv-lang-chip" id="cvLang2">English — Professional</span>
         </div>
       </div>
 
       <!-- Skills card -->
       <div class="cv-card cv-card--skills">
-        <span class="cv-card-tag">Skill Proficiency</span>
+        <span class="cv-card-tag" id="cvSkillsTag">Skill Proficiency</span>
         <div class="cv-skill">
           <div class="cv-skill-header">
-            <span>Application Support &amp; SLA</span>
+            <span class="cv-skill-name">Application Troubleshooting &amp; Triage</span>
             <span class="cv-skill-pct">95%</span>
           </div>
           <div class="cv-skill-track">
@@ -82,7 +86,7 @@
         </div>
         <div class="cv-skill">
           <div class="cv-skill-header">
-            <span>Incident Investigation</span>
+            <span class="cv-skill-name">Root-Cause Analysis &amp; Bug Reporting</span>
             <span class="cv-skill-pct">92%</span>
           </div>
           <div class="cv-skill-track">
@@ -91,7 +95,7 @@
         </div>
         <div class="cv-skill">
           <div class="cv-skill-header">
-            <span>Automation &amp; Internal Tools</span>
+            <span class="cv-skill-name">Process Automation &amp; Internal Tools</span>
             <span class="cv-skill-pct">88%</span>
           </div>
           <div class="cv-skill-track">
@@ -100,7 +104,7 @@
         </div>
         <div class="cv-skill">
           <div class="cv-skill-header">
-            <span>Knowledge Base &amp; Docs</span>
+            <span class="cv-skill-name">Knowledge Base &amp; Technical Writing</span>
             <span class="cv-skill-pct">85%</span>
           </div>
           <div class="cv-skill-track">
@@ -109,7 +113,7 @@
         </div>
         <div class="cv-skill">
           <div class="cv-skill-header">
-            <span>Software Development</span>
+            <span class="cv-skill-name">CRM Systems &amp; Stakeholder Support</span>
             <span class="cv-skill-pct">80%</span>
           </div>
           <div class="cv-skill-track">
@@ -120,38 +124,46 @@
 
       <!-- Timeline card -->
       <div class="cv-card cv-card--timeline">
-        <span class="cv-card-tag">Career Timeline</span>
+        <span class="cv-card-tag" id="cvTimelineTag">Career Timeline</span>
         <ul class="cv-timeline">
           <li class="cv-timeline-item">
-            <span class="cv-tl-year">2019 –<br>Present</span>
+            <span class="cv-tl-year">Oct 2024 –<br>Present</span>
             <span class="cv-tl-dot"></span>
             <div class="cv-tl-body">
-              <strong>Application Support Engineer</strong>
-              <p>Government &amp; Private Sector · Operational Systems · SLA Management</p>
+              <strong>Application Support Specialist (Internal Tools &amp; Automation)</strong>
+              <p>Enseyab Information Technology · Internal support tools &amp; documentation · KB standardization</p>
             </div>
           </li>
           <li class="cv-timeline-item">
-            <span class="cv-tl-year">Milestone</span>
+            <span class="cv-tl-year">Nov 2022 –<br>May 2023</span>
             <span class="cv-tl-dot"></span>
             <div class="cv-tl-body">
-              <strong>Automation Forge Initiative</strong>
-              <p>Designed rule-based ticket routing &amp; auto-status updates — reduced manual overhead ~40%</p>
+              <strong>Customer Service Specialist</strong>
+              <p>T Sport · Mobile app technical support · User journey streamlining</p>
             </div>
           </li>
           <li class="cv-timeline-item">
-            <span class="cv-tl-year">Milestone</span>
+            <span class="cv-tl-year">Sep 2022 –<br>Nov 2022</span>
             <span class="cv-tl-dot"></span>
             <div class="cv-tl-body">
-              <strong>KB Architecture Rebuild</strong>
-              <p>Restructured knowledge base with canonical taxonomy — cut average TTR by ~30%</p>
+              <strong>Customer Service Representative</strong>
+              <p>ccc by stc · High-volume CRM inquiries · Incident documentation</p>
             </div>
           </li>
           <li class="cv-timeline-item">
-            <span class="cv-tl-year">Ongoing</span>
+            <span class="cv-tl-year">Sep 2018 –<br>Sep 2021</span>
             <span class="cv-tl-dot"></span>
             <div class="cv-tl-body">
-              <strong>1,000+ Tickets Resolved</strong>
-              <p>Consistent 97% SLA compliance across multi-team, high-volume environments</p>
+              <strong>Customer Service Engineer</strong>
+              <p>qTech (Alqemam) · Onsite &amp; remote IT support · Workstation deployment &amp; maintenance</p>
+            </div>
+          </li>
+          <li class="cv-timeline-item">
+            <span class="cv-tl-year">2017</span>
+            <span class="cv-tl-dot"></span>
+            <div class="cv-tl-body">
+              <strong>Technical Diploma in Software</strong>
+              <p>Technical College (TVTC)</p>
             </div>
           </li>
         </ul>
@@ -161,18 +173,17 @@
       <div class="cv-card cv-card--code">
         <span class="cv-card-tag">// achievements.js</span>
         <pre class="cv-code"><code><span class="cv-kw">const</span> <span class="cv-var">engineer</span> = {
-  role:      <span class="cv-str">"App Support Engineer"</span>,
+  role:      <span class="cv-str">"App Support Specialist"</span>,
   exp:       <span class="cv-str">"5+ years"</span>,
-  resolved:  <span class="cv-num">1000</span>,
-  sla:       <span class="cv-str">"97%"</span>,
-  stack:     [
-    <span class="cv-str">"Python"</span>, <span class="cv-str">"JavaScript"</span>,
-    <span class="cv-str">"SQL"</span>, <span class="cv-str">"Bash"</span>,
+  sectors:   [<span class="cv-str">"Government"</span>, <span class="cv-str">"Private"</span>],
+  tools:     [
+    <span class="cv-str">"Git"</span>, <span class="cv-str">"VS Code"</span>,
+    <span class="cv-str">"Postman"</span>, <span class="cv-str">"CRM"</span>,
   ],
-  impact: {
-    routing: <span class="cv-str">"−40% manual load"</span>,
-    kb:      <span class="cv-str">"−30% TTR"</span>,
-    sla:     <span class="cv-str">"97% compliance"</span>,
+  strengths: {
+    reports:  <span class="cv-str">"Developer-ready tickets"</span>,
+    analysis: <span class="cv-str">"Root-cause &amp; UX"</span>,
+    docs:     <span class="cv-str">"KB architecture"</span>,
   },
 };</code></pre>
       </div>
@@ -194,12 +205,12 @@
         <div class="stat-label">سنوات الخبرة</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">10+</div>
-        <div class="stat-label">مشاريع مكتملة</div>
+        <div class="stat-number">4</div>
+        <div class="stat-label">شركات عمل بها</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">1000+</div>
-        <div class="stat-label">تذاكر دعم محلولة</div>
+        <div class="stat-number">2</div>
+        <div class="stat-label">قطاعات (حكومي وخاص)</div>
       </div>
     </div>
     <div class="skills-chips" id="tracksChips">

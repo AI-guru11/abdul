@@ -728,6 +728,8 @@ html[dir="rtl"] .ticket-list li::before { left: auto; right: 0; }
 .cv-about { font-size: 0.88rem; line-height: 1.65; opacity: 0.85; margin-bottom: 16px; }
 
 .cv-identity-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cv-identity-langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.cv-lang-chip { opacity: 0.75; font-size: 0.68rem; }
 
 .cv-chip {
   font-size: 0.72rem;
@@ -789,7 +791,7 @@ html[dir="rtl"] .ticket-list li::before { left: auto; right: 0; }
 
 .cv-tl-year {
   flex-shrink: 0;
-  width: 62px;
+  width: 76px;
   font-size: 0.65rem;
   font-weight: 600;
   color: var(--accent);
@@ -862,6 +864,6 @@ html[dir="rtl"] .ticket-list li::before { left: auto; right: 0; }
     grid-row: auto;
   }
 
-  .cv-tl-year { width: 52px; }
+  .cv-tl-year { width: 62px; }
 }
 
