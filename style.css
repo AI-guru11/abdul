@@ -206,6 +206,38 @@ section {
 .profile-section .tagline { color: var(--accent); font-size: 1.2rem; margin-bottom: 15px; font-weight: 500; }
 .profile-section .summary { max-width: 600px; margin: 0 auto 30px; line-height: 1.6; }
 
+/* ── Profile identity block: avatar + name horizontally aligned ── */
+.profile-identity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 20px;
+}
+
+/* Remove the column-mode bottom margin; the row gap provides spacing */
+.profile-identity .avatar-wrapper {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+/* Override the centred text-align that cascades from section{} */
+.profile-identity h1 {
+  margin-bottom: 0;
+  text-align: start;
+}
+
+/* Stack vertically on narrow screens, same as original column layout */
+@media (max-width: 480px) {
+  .profile-identity {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .profile-identity h1 {
+    text-align: center;
+  }
+}
+
 .profile-actions {
   display: flex;
   gap: 20px;
