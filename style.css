@@ -22,6 +22,9 @@ body {
 /* منع التمرير الخلفي عند فتح النوافذ المنبثقة */
 body.no-scroll {
   overflow: hidden;
+  /* touch-action: none blocks iOS Safari from routing touch-scroll to the body
+     even when overflow: hidden alone fails (common Safari < 16 behaviour) */
+  touch-action: none;
 }
 
 /* متغيرات الألوان الأساسية */
@@ -406,7 +409,9 @@ section {
   align-items: center;
   z-index: 3500;
   padding: 20px;
-  overflow-y: auto;
+  /* overscroll-behavior stops body from scrolling when finger reaches the edge of
+     the inner scroll container on touch devices (replaces overflow-y: auto here) */
+  overscroll-behavior: contain;
 }
 
 .case-modal-content {
@@ -414,9 +419,11 @@ section {
   z-index: 4001;
   width: 100%;
   max-width: 700px;
-  /* Cap height so the ticket panel never pushes content off-screen */
-  max-height: 90vh;
+  /* Sole scroll container — viewport locked, internal scroll only */
+  max-height: 88vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+  overscroll-behavior: contain;      /* prevents body scroll bleedthrough */
   background: rgba(45, 27, 78, 0.95);
   backdrop-filter: blur(26px);
   border-radius: 25px;
@@ -631,17 +638,21 @@ html[dir="rtl"] .ticket-list li::before { left: auto; right: 0; }
 
 /* ── Mobile: Developer Ticket responsive overrides ── */
 @media (max-width: 600px) {
-  /* Give the modal backdrop flex-start so very-tall content scrolls from top */
+  /* flex-start + top padding guarantees the card top is always visible;
+     align-items: center clips the top on very-tall content on iOS */
   .case-modal {
     align-items: flex-start;
     padding: 12px;
+    padding-top: 20px;
   }
 
-  /* Tighter horizontal padding; cap height more conservatively on small screens */
+  /* Tighter horizontal padding; restore touch-action on the scrollable child
+     (body.no-scroll sets touch-action: none globally, this re-enables it here) */
   .case-modal-content {
     padding: 18px 16px;
     border-radius: 18px;
-    max-height: 92vh;
+    max-height: 90vh;
+    touch-action: pan-y; /* re-enable vertical touch scroll inside the content */
   }
 
   /* Modal action buttons wrap gracefully at narrow widths */
