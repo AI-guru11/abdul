@@ -21,40 +21,124 @@ A **bilingual (Arabic/English) personal portfolio** for Abdulrahman Asiri — an
 portfolio-d7/
 ├── index.html            # Main HTML — bilingual RTL/LTR layout
 ├── style.css             # All styles (dark theme, animations, responsive)
-├── script.js             # Core app logic (cases data, UI interactions, i18n)
-├── ticket_composer.js    # AI-like ticket generator (local, no API calls)
 ├── service-worker.js     # PWA service worker — offline caching
 ├── manifest.json         # PWA manifest
 ├── CLAUDE.md             # This file
 ├── icons/
 │   ├── icon-192.png      # PWA icon (192×192)
 │   ├── icon-512.png      # PWA icon (512×512) — also used as avatar
-│   ├── envelope.svg      # Email icon
-│   ├── github.svg        # GitHub icon
-│   └── linkedin.svg      # LinkedIn icon
-└── projects/
-    ├── automation.png
-    ├── customer-service.png
-    ├── debugging.png
-    └── documentation.png
+│   ├── envelope.svg      # Email icon (CSS mask-image — cached for offline)
+│   ├── github.svg        # GitHub icon (CSS mask-image — cached for offline)
+│   └── linkedin.svg      # LinkedIn icon (CSS mask-image — cached for offline)
+├── projects/
+│   ├── automation.png
+│   ├── customer-service.png
+│   ├── debugging.png
+│   └── documentation.png
+└── src/                  # ES Module source tree
+    ├── main.js           # Entry point — event wiring, registry population
+    ├── ticket-composer.js# AI ticket generator (local, no API calls)
+    ├── data/             # Pure data modules (no imports)
+    │   ├── cases.js      # casesData array (12 incident cases)
+    │   ├── experience.js # experienceData array (4 role entries)
+    │   ├── translations.js # i18n dict + statusTranslations
+    │   └── tracks.js     # themes, trackInfo, interviewByTrack
+    ├── modules/          # Feature modules
+    │   ├── state.js      # appState singleton + loadSavedLang()
+    │   ├── registry.js   # Cross-boundary function registry (cycle-breaker)
+    │   ├── theme.js      # switchTheme, setTrack, applyTrackFilter, loadSavedTheme
+    │   ├── i18n.js       # applyTranslations, translateStatus
+    │   ├── board.js      # renderCaseBoard, searchCases
+    │   ├── modal.js      # showCaseModal, hideCaseModal, showRoleModal, hideRoleModal
+    │   ├── ticket.js     # renderTicketPanel, clearTicketPanel, copyTicketJson, handleGenerateTicket
+    │   ├── interview.js  # renderInterviewModal, buildCaseInterview, showInterviewModal, hideInterviewModal
+    │   ├── pwa.js        # registerServiceWorker
+    │   └── ui.js         # applyTrackChipSelection
+    └── utils/
+        └── dom.js        # escapeHtml, setCurrentYear, initScrollAnimations, initCursorSpotlight, initSkillBars
 ```
 
-> No build system, bundler, or package manager. This is a **vanilla static site** — HTML, CSS, and plain JS only.
+> No build system, bundler, or package manager. This is a **vanilla static site** — HTML, CSS, and native ES Modules only. Serving over HTTP (not `file://`) is required for ES modules and the service worker.
 
 ---
 
 ## Architecture & Key Concepts
 
-### Script Loading Order
+### Script Loading
 
-`index.html` loads scripts in this **required order**:
+`index.html` loads a single ES Module entry point:
 
 ```html
-<script src="ticket_composer.js"></script>  <!-- exposes window.composeTicket -->
-<script src="script.js"></script>            <!-- consumes window.composeTicket -->
+<script type="module" src="src/main.js"></script>
 ```
 
-Always maintain this order. `script.js` depends on `window.composeTicket` being available at runtime.
+The browser resolves all `import` statements automatically. No script order to manage.
+
+---
+
+### Module Dependency Graph
+
+```
+main.js        → all modules (orchestrator only; nothing imports main.js)
+data/*         → (no imports — pure data)
+ticket-composer.js → (no imports — pure computation)
+utils/dom.js   → (no imports)
+pwa.js         → (no imports)
+ui.js          → (no imports)
+state.js       → (no imports)
+registry.js    → (no imports)
+interview.js   → state, data/tracks
+i18n.js        → state, data/translations, data/tracks, registry
+ticket.js      → state, data/translations, ticket-composer, utils/dom
+board.js       → state, data/cases, theme (applyTrackFilter), registry
+theme.js       → state, data/tracks, registry
+modal.js       → state, data/tracks, data/translations, data/experience,
+                 registry, theme (setTrack), i18n (translateStatus), ticket (clearTicketPanel)
+```
+
+The graph is **acyclic** — verified. The `registry` pattern breaks five potential circular chains.
+
+---
+
+### Registry Pattern (Cycle-Breaker)
+
+`src/modules/registry.js` is a thin Map-based function registry that allows cross-module calls without circular `import` statements:
+
+```js
+// src/modules/registry.js
+const _r = new Map();
+export const registry = {
+  set: (k, fn) => _r.set(k, fn),
+  get: (k)     => _r.get(k),
+};
+```
+
+**Six keys registered in `main.js`** at module load time (before DOMContentLoaded):
+
+| Key | Function | Used by |
+|---|---|---|
+| `'renderCaseBoard'` | `renderCaseBoard` | `main.js` toggle handler |
+| `'renderInterviewModal'` | `renderInterviewModal` | `theme.js` (`setTrack`) |
+| `'renderTicketPanel'` | `renderTicketPanel` | `i18n.js` (`applyTranslations`) |
+| `'showCaseModal'` | `showCaseModal` | `board.js` (card click) |
+| `'searchCases'` | `searchCases` | `main.js` toggle handler |
+| `'showInterviewModal'` | `showInterviewModal` | `modal.js` (caseToInterviewBtn) |
+
+Callers use optional chaining: `registry.get('key')?.(args)`.
+
+---
+
+### State Sharing
+
+`src/modules/state.js` exports `appState` as a **mutable object reference**. All modules that import it share the same reference — mutations are immediately visible everywhere. No state copying needed.
+
+---
+
+### Adding New Data
+
+- **New case**: append to `src/data/cases.js` following the schema in the *Incident Board* section below.
+- **New i18n string**: add the key to both `ar` and `en` in `src/data/translations.js`, then reference via `i18n[appState.lang].your_key`.
+- **New track**: add to `themes`, `trackInfo`, and `interviewByTrack` in `src/data/tracks.js`; add the chip button in `index.html`.
 
 ---
 
@@ -67,7 +151,7 @@ Always maintain this order. `script.js` depends on `window.composeTicket` being 
 - All content in `casesData` carries dual fields: Arabic (`title`, `summary`, etc.) and English (`title_en`, `summary_en`, etc.).
 - **Always provide both language versions** for any user-facing string when adding features.
 
-#### `i18n` Dictionary (`script.js`)
+#### `i18n` Dictionary (`src/data/translations.js`)
 
 All static UI strings live in the `i18n` object keyed by `'ar'` and `'en'`. Keys include:
 
@@ -241,20 +325,20 @@ CSS custom properties on `:root` drive all theming:
 
 ### Neon Icon System
 
-Social icons use an inline-SVG injection pattern. In HTML:
+Social icons are rendered entirely via CSS `mask-image`. There is no JavaScript injection involved:
 
-```html
-<span class="neon-icon" data-icon="envelope" aria-hidden="true"></span>
+```css
+.neon-icon[data-icon="envelope"] { mask-image: url('icons/envelope.svg'); }
 ```
 
-`script.js` fetches `icons/<name>.svg` and injects the SVG markup inline so CSS glow effects can target SVG paths directly.
+The SVG files (`icons/envelope.svg`, `icons/github.svg`, `icons/linkedin.svg`) are fetched by the browser when CSS loads them, so they must be listed in the service worker cache for offline rendering — they already are in `ASSETS_TO_CACHE`.
 
 ---
 
-### AI Ticket Composer (`ticket_composer.js`)
+### AI Ticket Composer (`src/ticket-composer.js`)
 
 - **Fully local** — zero external API calls.
-- Wrapped in an IIFE; exposes a single global: `window.composeTicket(caseObj)`.
+- Native ES module; exports a single named function: `export function composeTicket(caseObj)`.
 - Triggered by "Generate Developer Ticket" inside the Case Room modal.
 - Pipeline: **Analyze → Critique → Refine**:
   1. **Analyze** — extracts severity, repro steps, expected/actual behavior, impact.
@@ -299,13 +383,8 @@ To add interview questions for a track, append to the corresponding array in `in
 ### PWA / Service Worker
 
 - `service-worker.js` uses a **Cache First** strategy with a network fallback to `./index.html` for navigations.
-- Cache name: **`aa-portfolio-v2`** — bump this when deploying breaking changes to cached assets.
-- Cached assets:
-
-```js
-'./', './index.html', './style.css', './script.js',
-'./manifest.json', './icons/icon-192.png', './icons/icon-512.png'
-```
+- Cache name: **`aa-portfolio-v4`** — bump this (and update `ASSETS_TO_CACHE`) when deploying breaking changes or adding new module files.
+- Cached assets include all `src/**` module files plus static assets (see `service-worker.js` for the full list).
 
 - On `activate`, old caches (any name ≠ current `CACHE_NAME`) are deleted automatically.
 - `manifest.json` sets `theme_color` and `background_color` to `#0a192f`.
@@ -316,7 +395,7 @@ To add interview questions for a track, append to the corresponding array in `in
 
 ### Adding a New Case
 
-1. Open `script.js` and append an object to `casesData` following the schema above.
+1. Open `src/data/cases.js` and append an object to `casesData` following the schema above.
 2. Assign a unique `id` (next in sequence, e.g., `'case13'`).
 3. Set `track` to one of the seven slugs from the table above.
 4. Set `status` to one of: `'Incoming'`, `'Investigating'`, `'Resolved'`, `'Prevented'`.
@@ -326,9 +405,9 @@ To add interview questions for a track, append to the corresponding array in `in
 
 ### Adding a New UI String
 
-1. Add the key with Arabic value to `i18n.ar`.
-2. Add the key with English value to `i18n.en`.
-3. Reference it in `applyTranslations()` or via `i18n[appState.lang].your_key`.
+1. Add the key with Arabic value to `i18n.ar` in `src/data/translations.js`.
+2. Add the key with English value to `i18n.en` in the same file.
+3. Reference it in `applyTranslations()` (`src/modules/i18n.js`) or via `i18n[appState.lang].your_key`.
 
 ### Modifying Styles
 
@@ -341,20 +420,23 @@ To add interview questions for a track, append to the corresponding array in `in
 ### Adding a New Skill Track
 
 1. Add a `<button class="chip" data-theme="new_slug" title="Arabic tooltip">Display Name</button>` in `index.html` inside `#tracksChips`.
-2. Add to `themes` in `script.js`: `new_slug: { primary, secondary, accent }`.
-3. Add to `trackInfo` in `script.js`: `new_slug: { en: '...', ar: '...' }`.
-4. Add an array to `interviewByTrack` in `script.js`: `new_slug: [{ question_ar, answer_ar, question_en, answer_en }]`.
+2. Add to `themes` in `src/data/tracks.js`: `new_slug: { primary, secondary, accent }`.
+3. Add to `trackInfo` in `src/data/tracks.js`: `new_slug: { en: '...', ar: '...' }`.
+4. Add an array to `interviewByTrack` in `src/data/tracks.js`: `new_slug: [{ question_ar, answer_ar, question_en, answer_en }]`.
 5. Add a CSS theme variable block in `style.css` if accent-specific chip styles are needed.
 
 ### PWA Cache Updates
 
-When modifying any cached file, increment the cache version in `service-worker.js`:
+When modifying any cached file, or **adding a new `src/` module file**, do both:
+
+1. **Add the new file path** to `ASSETS_TO_CACHE` in `service-worker.js` (e.g., `'./src/modules/new-module.js'`).
+2. **Bump the cache version**:
 
 ```js
-const CACHE_NAME = 'aa-portfolio-v3';  // was v2
+const CACHE_NAME = 'aa-portfolio-v5';  // was v4
 ```
 
-This forces the service worker to purge the old cache on next activation.
+This forces the service worker to purge the old cache on next activation. Failing to add a new module to the cache list will cause that module to be missing when the page loads offline.
 
 ---
 
