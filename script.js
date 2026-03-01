@@ -33,6 +33,8 @@ const casesData = [
     fix_en: 'Rollback update + temporarily disable feature flag + rebuild index/optimize queries.',
     impact: 'تعطل الحجوزات (تأثير عالي على المستخدمين والإيرادات/العمليات).',
     impact_en: 'Bookings blocked (high user and revenue/operations impact).',
+    expected_en: 'Booking creation should complete successfully, payment should process, and a confirmation reference should be returned to the user — free of 500 errors or timeouts.',
+    expected_ar: 'يجب أن يكتمل إنشاء الحجز بنجاح، وتتم معالجة الدفع، وتُعاد مرجع التأكيد للمستخدم — دون أخطاء 500 أو انتهاء مهلة.',
     prevention: 'اختبارات تكامل قبل النشر + canary release + مراقبة DB latency/locks.',
     prevention_en: 'Pre-release integration tests + canary releases + DB latency/lock monitoring.'
   },
@@ -52,6 +54,8 @@ const casesData = [
     fix_en: 'Update refresh-token flow + invalidate old sessions + hotfix expiration sync.',
     impact: 'حجب الوصول للتطبيق لشريحة من المستخدمين (مؤثر على الخدمة).',
     impact_en: 'Users blocked from accessing the app (service disruption).',
+    expected_en: 'After successful authentication, the user should land on the home dashboard and remain authenticated for the full session duration — no redirect loop or token expiry mid-session.',
+    expected_ar: 'بعد المصادقة الناجحة، يجب أن يصل المستخدم للوحة التحكم الرئيسية ويبقى مسجلاً طوال مدة الجلسة دون أي حلقة إعادة توجيه أو انتهاء للـToken في منتصف الجلسة.',
     prevention: 'Regression tests لرحلة auth + مراقبة معدلات فشل الدخول + canary على auth changes.',
     prevention_en: 'Auth journey regression tests + monitor login failures + canary auth changes.'
   },
@@ -71,6 +75,8 @@ const casesData = [
     fix_en: 'Restart integration service + rotate credentials + reprocess queued messages.',
     impact: 'بيانات حضور غير دقيقة تؤثر على HR والعمليات.',
     impact_en: 'Inaccurate attendance impacting HR and operations.',
+    expected_en: 'Biometric scan events captured on the device should sync to the attendance registry within the configured SLA window, with all records visible and no queue backlog.',
+    expected_ar: 'يجب أن تُزامَن أحداث تسجيل البصمة من الجهاز إلى سجل الحضور خلال نافذة الـSLA المحددة مع ظهور جميع السجلات فوراً دون أي تراكم في الطابور.',
     prevention: 'Health checks + alerts للـqueue lag + runbook واضح + monitor integration SLA.',
     prevention_en: 'Health checks + queue lag alerts + clear runbook + monitor integration SLA.'
   },
@@ -92,6 +98,8 @@ const casesData = [
     fix_en: 'Implement severity matrix + required impact fields + auto-suggest severity in ticket form.',
     impact: 'تدهور تجربة المستخدم وزيادة downtime بسبب تأخر التصعيد.',
     impact_en: 'User experience degraded and downtime increased due to delayed escalation.',
+    expected_en: 'All high-impact incidents should be classified as High severity based on a standardized severity/SLA matrix, automatically triggering the correct escalation path and response time.',
+    expected_ar: 'يجب تصنيف جميع الحوادث عالية التأثير بدرجة "عالية" وفق مصفوفة Severity/SLA موحدة، مع تفعيل مسار التصعيد ووقت الاستجابة الصحيح تلقائيًا.',
     prevention: 'تدريب الفريق + مراجعة أسبوعية للحوادث + dashboard لمعدل الالتزام بـSLA.',
     prevention_en: 'Team training + weekly incident reviews + SLA compliance dashboard.'
   },
@@ -111,6 +119,8 @@ const casesData = [
     fix_en: 'Automated update cadence every X hours + ETA + standard message templates.',
     impact: 'ارتفاع الحمل على الدعم وتراجع الرضا.',
     impact_en: 'Higher support load and reduced satisfaction.',
+    expected_en: 'Open tickets in Investigating status should receive standardized proactive updates at defined intervals (e.g., every 4 hours), including investigation status and a clear ETA — eliminating follow-up noise.',
+    expected_ar: 'يجب أن تتلقى التذاكر المفتوحة في حالة "قيد التحقيق" تحديثات استباقية معيارية على فترات محددة (كل 4 ساعات مثلاً) تشمل حالة التحقيق والوقت المتوقع للحل — مما يُلغي تذاكر المتابعة.',
     prevention: 'Update-SLA metrics + ownership واضح + runbook للتواصل أثناء الحوادث.',
     prevention_en: 'Update-SLA metrics + clear ownership + incident comms runbook.'
   },
@@ -130,6 +140,8 @@ const casesData = [
     fix_en: 'Quick start + short walkthrough video + in-app FAQ + illustrated KB steps.',
     impact: 'ضغط على الدعم وانخفاض الرضا وتأخر الحل للحالات الأهم.',
     impact_en: 'Support overload, lower satisfaction, and slower handling of critical issues.',
+    expected_en: 'Following a new feature release, users should complete key workflows independently via in-app guidance — with no spike in "how-to" support tickets within the first 48 hours.',
+    expected_ar: 'عقب إطلاق ميزة جديدة، يجب أن يتمكن المستخدمون من إنجاز المهام الأساسية باستقلالية عبر الإرشادات داخل التطبيق — دون ارتفاع في تذاكر "كيف أستخدم" خلال أول 48 ساعة.',
     prevention: 'Enablement plan لكل إصدار + قياس adoption + تحديث الإرشادات بناءً على analytics.',
     prevention_en: 'Enablement plan per release + adoption metrics + iterate guidance using analytics.'
   },
@@ -151,6 +163,8 @@ const casesData = [
     fix_en: 'Rule-based routing + required fields + standardized tags.',
     impact: 'تقليل زمن الاستجابة وتحسن توزيع العمل.',
     impact_en: 'Improved response time and workload distribution.',
+    expected_en: 'Submitted tickets should be automatically routed to the correct team or agent based on category and required fields, reaching the right queue within SLA — with zero manual intervention.',
+    expected_ar: 'يجب توجيه التذاكر المُقدَّمة تلقائيًا للفريق أو الموظف الصحيح بناءً على الفئة والحقول الإلزامية وصولاً للطابور المناسب خلال الـSLA — دون أي تدخل يدوي.',
     prevention: 'مراجعة شهرية للقواعد + dashboard لمعدل mis-route.',
     prevention_en: 'Monthly rule reviews + mis-route rate dashboard.'
   },
@@ -170,6 +184,8 @@ const casesData = [
     fix_en: 'Auto-search by category/keywords + show top 3 suggested articles.',
     impact: 'تقليل الحمل على الدعم وتحسن سرعة حل المستخدم ذاتيًا.',
     impact_en: 'Lower support load and faster self-resolution.',
+    expected_en: 'When a user begins typing in the ticket form, the top 3 relevant KB articles should surface automatically — enabling self-resolution before the ticket is submitted.',
+    expected_ar: 'عند بدء المستخدم في كتابة تفاصيل التذكرة، يجب أن تظهر أهم 3 مقالات KB ذات الصلة تلقائيًا — مما يُتيح الحل الذاتي قبل إرسال التذكرة.',
     prevention: 'مراجعة أسبوعية لأكثر الاستفسارات + تحسين keywords وربطها بالمقالات.',
     prevention_en: 'Weekly review of top queries + improve keywords and article mapping.'
   },
@@ -189,6 +205,8 @@ const casesData = [
     fix_en: 'Scheduled updates with ETA + “What we’re doing now” template.',
     impact: 'خفض الإزعاج وزيادة الثقة وتقليل back-and-forth.',
     impact_en: 'Less noise, higher trust, fewer back-and-forth messages.',
+    expected_en: 'Tickets in Investigating status should trigger automated periodic notifications to the reporter at defined intervals, including investigation progress and a concrete estimated resolution time.',
+    expected_ar: 'يجب أن تُصدر التذاكر في حالة "قيد التحقيق" إشعارات دورية تلقائية للمُبلِّغ على فترات محددة تتضمن تقدم التحقيق والوقت المتوقع للحل.',
     prevention: 'Update-SLA + ownership + مراجعة شهرية لنصوص القوالب.',
     prevention_en: 'Update-SLA + ownership + monthly template review.'
   },
@@ -210,6 +228,8 @@ const casesData = [
     fix_en: 'Taxonomy + template DoD + canonical naming conventions.',
     impact: 'تقليل التذاكر المتكررة وتحسن self-service.',
     impact_en: 'Fewer repeat tickets and improved self-service.',
+    expected_en: 'Users should locate the correct KB article within a single search query or 2 clicks, guided by a clear taxonomy, consistent article titles, and accurate keywords.',
+    expected_ar: 'يجب أن يتمكن المستخدمون من إيجاد مقالة KB الصحيحة باستعلام بحث واحد أو نقرتين، مدعومًا بتصنيف واضح وعناوين معيارية وكلمات مفتاحية دقيقة.',
     prevention: 'حوكمة KB + مراجعة ربع سنوية + owner لكل مجال.',
     prevention_en: 'KB governance + quarterly reviews + domain owners.'
   },
@@ -229,6 +249,8 @@ const casesData = [
     fix_en: 'Role matrix + onboarding templates + audit config + corrective update.',
     impact: 'تعطّل فرق عن أداء عملها وزيادة تذاكر “الميزة غير موجودة”.',
     impact_en: 'Teams blocked; increased “feature missing” tickets.',
+    expected_en: 'After provisioning, a new user should immediately see all menus and features associated with their assigned role, with permissions exactly matching the defined access matrix — no missing scopes.',
+    expected_ar: 'بعد التفعيل، يجب أن يرى المستخدم الجديد فوراً جميع القوائم والميزات المرتبطة بدوره، وأن تتطابق الصلاحيات تمامًا مع مصفوفة الوصول المحددة — دون نطاقات ناقصة.',
     prevention: 'Pre-go-live access tests + change log للأدوار + مراجعة دورية.',
     prevention_en: 'Pre-go-live access tests + role change log + periodic reviews.'
   },
@@ -248,6 +270,8 @@ const casesData = [
     fix_en: 'Regression checklist + smoke tests + test notes + link to change scope.',
     impact: 'ارتفاع التذاكر وتراجع الثقة وزيادة وقت التحقيق.',
     impact_en: 'Higher ticket volume, reduced trust, longer investigation time.',
+    expected_en: 'All baseline user flows should continue to function correctly after any code change, validated by a pre-release regression checklist and automated smoke tests with a clear rollback path.',
+    expected_ar: 'يجب أن تستمر جميع مسارات المستخدم الأساسية في العمل بشكل صحيح بعد أي تغيير في الكود، ويُتحقق منها عبر قائمة التحقق الرجعي قبل النشر واختبارات الدخان التلقائية مع مسار Rollback واضح.',
     prevention: 'UAT + pre-release smoke + clear rollback path + severity definitions.',
     prevention_en: 'UAT + pre-release smoke + clear rollback path + severity definitions.'
   }
