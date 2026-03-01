@@ -1,12 +1,31 @@
-const CACHE_NAME = 'aa-portfolio-v3';
+const CACHE_NAME = 'aa-portfolio-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
-  './script.js',
   './manifest.json',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './icons/envelope.svg',
+  './icons/github.svg',
+  './icons/linkedin.svg',
+  './src/main.js',
+  './src/ticket-composer.js',
+  './src/data/cases.js',
+  './src/data/experience.js',
+  './src/data/translations.js',
+  './src/data/tracks.js',
+  './src/modules/state.js',
+  './src/modules/registry.js',
+  './src/modules/theme.js',
+  './src/modules/i18n.js',
+  './src/modules/board.js',
+  './src/modules/modal.js',
+  './src/modules/ticket.js',
+  './src/modules/interview.js',
+  './src/modules/pwa.js',
+  './src/modules/ui.js',
+  './src/utils/dom.js',
 ];
 
 self.addEventListener('install', event => {
