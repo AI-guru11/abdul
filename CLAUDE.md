@@ -122,12 +122,41 @@ const appState = {
 |---|---|
 | `.cv-card--identity` | Name, role, meta, about text, competency chips, language badges |
 | `.cv-card--skills` | Five skill progress bars (`.cv-skill-fill[data-width]`) |
-| `.cv-card--timeline` | Career history list (`.cv-timeline`) |
+| `.cv-card--timeline` | Career history list (`.cv-timeline`) — items are clickable |
 | `.cv-card--code` | Decorative `achievements.js` code snippet |
 
 - Skill bar widths are set via the `data-width` attribute; CSS animates them on scroll via `IntersectionObserver` in `script.js`.
 - A **Download PDF** button (`#cvDownloadBtn`) links to `cv.pdf` (place the file at the repo root to activate it).
 - All text in the CV cards is translated by `applyTranslations()` using the `cv_*` keys in `i18n`.
+
+#### Role Detail Modals
+
+Timeline items for the four job roles carry a `data-exp-id` attribute. Clicking one opens `#role-modal` (reusing `.case-modal` CSS) via `showRoleModal(expId)`. The modal renders:
+
+- Role title, company, and date range
+- Full bilingual bullet-point responsibilities
+- A highlighted **Key Achievement** block
+- A **"See related cases →"** button that calls `setTrack(slug)` and scrolls to `#cases`
+
+Role data lives in the `experienceData` array in `script.js`, immediately before `const i18n`:
+
+```js
+{
+  id: 'expXX',                    // 'exp01' – 'exp04'
+  track: 'automation_forge',      // one of the 7 track slugs — links to Incident Board
+  period_ar: 'Arabic date range',
+  period_en: 'English date range',
+  title_ar: 'Arabic job title',
+  title_en: 'English job title',
+  company: 'Company name',        // same in both languages
+  bullets_en: [ '...', '...' ],   // 3 responsibility bullets
+  bullets_ar: [ '...', '...' ],
+  achievement_en: 'Key achievement text',
+  achievement_ar: 'Arabic key achievement text'
+}
+```
+
+Two i18n keys drive the modal labels: `exp_achievement` ("Key Achievement") and `exp_track_link` ("See related cases").
 
 ---
 
@@ -381,6 +410,9 @@ Then open `http://localhost:8080`.
 | `#cvSkillsTag` | `<span>` | Skills card label (translated) |
 | `#cvTimelineTag` | `<span>` | Timeline card label (translated) |
 | `#cvDownloadBtn` | `<a>` | "Download PDF" link (`href="cv.pdf"`) |
+| `#role-modal` | `<div>` | Role detail modal overlay |
+| `#role-modal-body` | `<div>` | Role detail content target |
+| `#close-role-modal` | `<button>` | Closes role detail modal |
 
 > **`body.no-scroll`** — added by JS when any modal is open; sets `overflow: hidden` and `touch-action: none` to block scroll on iOS Safari.
 
