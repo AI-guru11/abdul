@@ -335,16 +335,31 @@ section {
   padding: 15px;
   border-radius: 20px;
   background: rgba(12, 14, 22, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(18px);
   color: var(--light);
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  /* Include border-color so hover glow animates smoothly */
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .case-card h4 { margin-bottom: 6px; font-size: 1.0rem; color: var(--accent); font-weight: 600; }
 .case-card p { font-size: 0.85rem; line-height: 1.4; }
-.case-card:hover { transform: translateY(-5px); box-shadow: 0 0 7px rgb(var(--accent-rgb) / 0.55); }
+
+/* Desktop hover — layered shadow gives depth, accent border ties to active theme */
+.case-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 14px rgb(var(--accent-rgb) / 0.45);
+  border-color: rgba(var(--accent-rgb), 0.55);
+}
+
+/* Mobile tap — quick scale-down acknowledges the interaction */
+.case-card:active {
+  transform: translateY(-2px) scale(0.97);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px rgb(var(--accent-rgb) / 0.35);
+  border-color: rgba(var(--accent-rgb), 0.40);
+  transition-duration: 0.1s;
+}
 
 /* ===== نافذة غرفة القضية ===== */
 .hidden { display: none !important; }
@@ -391,9 +406,11 @@ html[dir="ltr"] .close-case-modal { left: auto; right: 10px; }
 .case-modal-body strong { color: var(--accent); }
 
 /* تأثيرات البحث والفلترة */
+/* Search match: positive accent only — no dimming of non-matches */
 .highlight-case { box-shadow: 0 0 8px rgb(var(--accent-rgb) / 0.55); border-color: var(--accent); }
-.dim-case { opacity: 0.3; }
-.track-dim { opacity: 0.35; filter: saturate(0.75); }
+.dim-case { opacity: 1; }
+/* Track filter: matched cards get a border glow — non-matched stay fully visible */
+.track-dim { opacity: 1; filter: none; }
 .track-focus { box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.22); border-color: rgba(var(--accent-rgb), 0.55); }
 
 /* ===== زر تبديل اللغة ===== */
