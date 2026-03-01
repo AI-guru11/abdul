@@ -10,6 +10,10 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth; /* enables smooth anchor scroll (#cv, #contact, etc.) */
+}
+
 body {
   font-family: 'Inter', Tahoma, Arial, sans-serif;
   line-height: 1.6;
@@ -76,6 +80,7 @@ body::after {
 .stat-card,
 .case-column,
 .case-card,
+.cv-card,
 .case-modal-content,
 .interview-modal-content {
   transition: background-color 600ms ease, border-color 600ms ease, box-shadow 600ms ease;
@@ -660,5 +665,203 @@ html[dir="rtl"] .ticket-list li::before { left: auto; right: 0; }
     flex-wrap: wrap;
     gap: 8px;
   }
+}
+
+/* =====================================================
+   قسم السيرة الذاتية التفاعلية — Interactive CV
+   ===================================================== */
+
+/* ── Bento grid container ── */
+.cv-bento {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 18px;
+  max-width: 860px;
+  margin: 0 auto 28px;
+  /* override section's text-align: center so card text left-aligns */
+  text-align: start;
+}
+
+/* ── Base card ── */
+.cv-card {
+  background: rgba(12, 14, 22, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  padding: 22px 24px;
+  backdrop-filter: blur(18px);
+  color: var(--light);
+}
+
+/* Identity card: accent border, spans row 1 col 1 */
+.cv-card--identity {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  border-color: rgba(var(--accent-rgb), 0.45);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.10);
+}
+
+/* Skills card: row 1 col 2 */
+.cv-card--skills { grid-column: 2 / 3; grid-row: 1 / 2; }
+
+/* Timeline card: row 2 col 1 */
+.cv-card--timeline { grid-column: 1 / 2; grid-row: 2 / 3; }
+
+/* Code card: row 2 col 2 */
+.cv-card--code { grid-column: 2 / 3; grid-row: 2 / 3; }
+
+/* ── Card eyebrow tag ── */
+.cv-card-tag {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  opacity: 0.9;
+}
+
+/* ── Identity card content ── */
+.cv-name { font-size: 1.45rem; font-weight: 700; margin-bottom: 6px; }
+.cv-role { color: var(--accent); font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; }
+.cv-meta { font-size: 0.78rem; opacity: 0.55; margin-bottom: 12px; }
+.cv-about { font-size: 0.88rem; line-height: 1.65; opacity: 0.85; margin-bottom: 16px; }
+
+.cv-identity-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.cv-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accent-rgb), 0.45);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+  white-space: nowrap;
+}
+
+/* ── Skill bars ── */
+.cv-skill { margin-bottom: 13px; }
+.cv-skill:last-child { margin-bottom: 0; }
+
+.cv-skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+}
+
+.cv-skill-pct {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  margin-inline-start: 8px;
+}
+
+.cv-skill-track {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cv-skill-fill {
+  height: 100%;
+  width: 0%; /* starts at 0; JS sets the final width to trigger the transition */
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent) 0%, rgb(var(--accent-rgb) / 0.55) 100%);
+  box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.45);
+  transition: width 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Career timeline ── */
+.cv-timeline { list-style: none; padding: 0; }
+
+.cv-timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.cv-timeline-item:last-child { margin-bottom: 0; }
+
+.cv-tl-year {
+  flex-shrink: 0;
+  width: 62px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: end;
+  line-height: 1.35;
+  padding-top: 2px;
+}
+
+.cv-tl-dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 7px var(--accent), 0 0 14px rgb(var(--accent-rgb) / 0.4);
+  margin-top: 3px;
+}
+
+.cv-tl-body { flex: 1; min-width: 0; }
+.cv-tl-body strong { display: block; font-size: 0.86rem; margin-bottom: 3px; }
+.cv-tl-body p { font-size: 0.77rem; opacity: 0.68; line-height: 1.4; margin: 0; }
+
+/* ── Code snippet card ── */
+.cv-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.78rem;
+  line-height: 1.75;
+  white-space: pre-wrap;    /* wraps on narrow screens */
+  overflow-x: auto;
+  overflow-wrap: break-word;
+  color: #d4d4d4;
+  margin: 0;
+}
+
+/* Minimal syntax palette using existing theme accent colours */
+.cv-kw  { color: #BFA3FF; font-weight: 600; } /* keywords  → knowledge_vault purple */
+.cv-var { color: #3DA9FC; }                    /* variables → pulse_support blue    */
+.cv-str { color: #2EE59D; }                    /* strings   → automation green      */
+.cv-num { color: #FFC857; }                    /* numbers   → enablement amber      */
+
+/* ── Download action row ── */
+.cv-actions { display: flex; justify-content: center; margin-top: 4px; }
+
+.cv-download-btn {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.75rem 2.2rem;
+  border-radius: 30px;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.cv-download-btn:hover {
+  background: var(--accent);
+  color: var(--primary);
+  box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.5);
+}
+
+/* ── Mobile: collapse to single column ── */
+@media (max-width: 700px) {
+  .cv-bento { grid-template-columns: 1fr; }
+
+  .cv-card--identity,
+  .cv-card--skills,
+  .cv-card--timeline,
+  .cv-card--code {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .cv-tl-year { width: 52px; }
 }
 
