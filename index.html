@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abdulrahman | Portfolio</title>
+  <meta name="description" content="بورتفوليو عبد الرحمن عسيري - Application Support & Automation">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json">
+  <!-- استيراد خط Inter من Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- استيراد ملف الأنماط الرئيسي -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- زر تبديل اللغة -->
+  <button id="langToggle" class="lang-toggle" title="تبديل اللغة">EN</button>
+
+  <!-- طبقة انتقال الثيم (Theme Transition Overlay) -->
+  <div id="themeOverlay" class="theme-overlay" aria-hidden="true"></div>
+
+  <!-- تأثير ضوء المؤشر -->
+  <div id="cursorSpotlight" class="cursor-spotlight"></div>
+  <!-- قسم الملف التعريفي -->
+  <section id="profile" class="profile-section reveal">
+    <div class="profile-inner">
+      <div class="avatar-wrapper">
+        <img src="icons/icon-512.png" alt="Avatar" class="avatar">
+      </div>
+      <h1>Abdulrahman Asiri</h1>
+      <p class="tagline">مهندس دعم التطبيقات | أدوات داخلية وأتمتة | مطور برمجيات</p>
+      <p class="summary">
+        متخصص دعم التطبيقات بخبرة تزيد عن خمس سنوات في دعم الأنظمة التشغيلية في بيئات حكومية وخاصة. ماهر في استكشاف المشكلات وتحليل رحلة المستخدم وإعداد تقارير فنية جاهزة للمطورين، بارع في حل المشكلات المعقدة والعمل في بيئات ديناميكية وتقديم نتائج عالية الجودة تحت الضغط. ملتزم بالتعلم المستمر وتحسين جودة الدعم وتجربة المستخدم.
+      </p>
+      <div class="profile-actions">
+        <a href="../Abdulrahman_CVtxt.txt" class="btn primary-btn">عرض السيرة الذاتية</a>
+        <a href="#contact" class="btn secondary-btn">تواصل معي</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم الإحصائيات والمهارات -->
+  <section id="stats" class="stats-section reveal">
+    <h2 id="statsTitle">الإحصائيات والمهارات</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">سنوات الخبرة</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">10+</div>
+        <div class="stat-label">مشاريع مكتملة</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">تذاكر دعم محلولة</div>
+      </div>
+    </div>
+    <div class="skills-chips" id="tracksChips">
+      <!-- Tracks: تظهر بالإنجليزية، مع تلميح عربي عند المرور (tooltip). -->
+      <button type="button" class="chip" data-theme="pulse_support" title="دعم التطبيقات">Pulse Support</button>
+      <button type="button" class="chip" data-theme="sla_command" title="إدارة الحوادث والأولويات">SLA Command</button>
+      <button type="button" class="chip" data-theme="automation_forge" title="الأتمتة والأدوات الداخلية">Automation Forge</button>
+      <button type="button" class="chip" data-theme="knowledge_vault" title="قاعدة المعرفة والتوثيق">Knowledge Vault</button>
+      <button type="button" class="chip" data-theme="enablement_studio" title="تمكين المستخدم">Enablement Studio</button>
+      <button type="button" class="chip" data-theme="implementation_dock" title="الدعم أثناء التطبيق والتهيئة">Implementation Dock</button>
+      <button type="button" class="chip" data-theme="quality_sentinel" title="الاختبار والانحدار والجودة">Quality Sentinel</button>
+    </div>
+  </section>
+
+  <!-- قسم اللوحة - ملفات القضايا -->
+  <section id="cases" class="cases-section reveal">
+    <h2 id="casesTitle">لوحة القضايا (Incident Board)</h2>
+    <!-- عناصر التحكم في اللوحة: البحث ووضع المقابلة -->
+    <div class="case-controls">
+      <input id="caseSearchInput" type="text" placeholder="بحث عن قضية..." class="case-search-input">
+      <button id="interviewModeBtn" class="btn interview-btn">وضع المقابلة</button>
+    </div>
+    <div id="case-board" class="case-board">
+      <!-- يتم ملء الأعمدة والقضايا عبر JavaScript -->
+    </div>
+  </section>
+
+  <!-- قسم التواصل -->
+  <section id="contact" class="contact-section reveal">
+    <h2 id="contactTitle">تواصل معي</h2>
+    <p id="contactText" class="contact-text">يسعدني تواصلك عبر المنصات التالية:</p>
+    <div class="social-links">
+      <a href="mailto:abdurhmnasiri31@gmail.com" class="social-btn email" title="Email">
+        <span class="neon-icon" data-icon="envelope" aria-hidden="true"></span>
+      </a>
+      <a href="https://github.com/abdulrahman-asiri" target="_blank" class="social-btn github" title="GitHub">
+        <span class="neon-icon" data-icon="github" aria-hidden="true"></span>
+      </a>
+      <a href="https://www.linkedin.com/in/abdulrahman-asiri" target="_blank" class="social-btn linkedin" title="LinkedIn">
+        <span class="neon-icon" data-icon="linkedin" aria-hidden="true"></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- نافذة غرفة القضية (Case Room) -->
+  <div id="case-modal" class="case-modal hidden">
+    <div class="case-modal-content">
+      <button id="close-case-modal" class="close-case-modal">×</button>
+      <div id="case-modal-body" class="case-modal-body">
+        <!-- ستُعبّأ تفاصيل القضية هنا عبر JavaScript -->
+      </div>
+      <div class="case-modal-actions">
+        <button id="generateTicketBtn" class="case-ticket-btn">Generate Developer Ticket</button>
+        <button id="copyTicketJsonBtn" class="case-copy-btn" disabled>Copy JSON</button>
+        <button id="caseToInterviewBtn" class="case-interview-btn">Interview this case</button>
+      </div>
+
+      <!-- AI Ticket Composer Output -->
+      <div id="ticketPanel" class="ticket-panel hidden">
+        <div class="ticket-panel-head">
+          <div class="ticket-title" id="ticketPanelTitle">Developer Ticket</div>
+          <div class="ticket-badge" id="ticketQualityBadge">–</div>
+        </div>
+        <div class="ticket-panel-sub" id="ticketImproveNote"></div>
+        <div class="ticket-grid">
+          <div class="ticket-card" id="ticketEnglish"></div>
+          <div class="ticket-card" id="ticketArabic"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة وضع المقابلة (Interview Mode) -->
+  <div id="interview-modal" class="interview-modal hidden">
+    <div class="interview-modal-content">
+      <button id="close-interview-modal" class="close-interview-modal">×</button>
+      <div class="interview-header-row">
+        <div id="interviewTrackBadge" class="track-badge">Pulse Support</div>
+        <button id="interviewBackBtn" class="interview-back-btn hidden">Back</button>
+      </div>
+      <div id="interview-modal-body" class="interview-modal-body">
+        <!-- سيتم توليد الأسئلة والأجوبة هنا عبر JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- توقيع الهوية الخاص بموقع AA -->
+  <div id="signature" class="signature">AA</div>
+
+  <!-- تذييل الصفحة -->
+  <footer class="footer">
+    <p>© <span id="currentYear"></span> عبد الرحمن عسيري. كل الحقوق محفوظة.</p>
+  </footer>
+
+  <script src="ticket_composer.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+
